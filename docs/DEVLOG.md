@@ -34,53 +34,81 @@
 
 ---
 
-## 🧩 Component Breakdown & Task List
+## 📈 Progress Log
 
-### A. Data Integration Services
-1. **Meta Ads Integration**
-   - Set up Meta App & get API credentials.
-   - Build a service to fetch campaigns, ads, and conversion data.
-   - Store in Firestore.
+**Date: 2025-06-20**
 
-2. **Google Analytics Integration**
-   - Set up GA4 API access.
-   - Build a service to fetch relevant analytics data.
-   - Store in Firestore.
+*   **Project Initialization:**
+    *   Scaffolded a new Vue 3 + Vite project named `frontend`.
+    *   Initialized a git repository and pushed the initial commit to GitHub.
+*   **Monorepo Restructuring:**
+    *   Restructured the project into a monorepo containing `frontend`, `backend`, and `docs` directories, all managed under a single root `.git` configuration.
+    *   Updated `.gitignore` to support the monorepo structure and exclude sensitive files like `serviceAccountKey.json`.
+*   **Backend Scaffolding:**
+    *   Created the `backend` directory with a Node.js `package.json`.
+    *   Stubbed out service files for Meta, Google Analytics, and GTM integrations.
+*   **Firestore Integration & Setup:**
+    *   Installed `firebase-admin` SDK in the backend.
+    *   Installed `firebase-tools` CLI globally.
+    *   Enabled the Firestore API in the Google Cloud project.
+    *   Created the Firestore database instance in production mode.
+    *   Wrote and deployed secure default Firestore security rules (`firestore.rules`).
+    *   Configured the project for Firebase deployments with `.firebaserc` and `firebase.json`.
+    *   **Successfully tested the backend's connection to Firestore (read/write/delete).** The foundation is now verified.
+*   **Meta Campaigns End-to-End Integration:**
+    *   Successfully configured Google Secret Manager for secure credential storage.
+    *   Set up IAM permissions for the backend service account (Secret Manager Accessor, Firestore Owner, etc.).
+    *   Integrated Meta Marketing API using the Facebook Business SDK.
+    *   Fetched 25 campaigns from the Meta Ad Account using a long-lived access token.
+    *   Wrote all campaign data to Firestore in the `meta_campaigns` collection.
+    *   Confirmed full pipeline: Meta API → Secret Manager → Backend → Firestore.
+*   **Advanced Meta Data Integration & Frontend Dashboard:**
+    *   Designed and implemented a hierarchical Firestore schema: campaigns → ad sets → ads → daily insights.
+    *   Upgraded backend sync to fetch and store the full Meta data hierarchy.
+    *   Populated Firestore with all campaign, ad set, ad, and insight data.
+    *   Built a professional, expandable dashboard in Vue 3 using Element Plus.
+    *   Dashboard supports drilldown from campaigns to ad sets, ads, and daily insights.
+    *   Ready for further enhancements (charts, filtering, etc.).
+    *   Google Analytics and GTM integration deferred for next phase.
+*   **Cleanup:**
+    *   Deleted the old CampaignDashboard component as it is no longer used. All campaign analytics are now handled by MetaDashboard.vue.
 
-3. **Google Tag Manager Integration**
-   - Set up GTM API access.
-   - Fetch custom events/tags.
-   - Store in Firestore.
+*   **Planned Enhancements:**
+    *   Integrate Firebase Gemini to enable natural language querying and analysis of Firestore data. Users will be able to ask questions and receive insights and recommendations directly from the dashboard.
+    *   Add a 'Sync Meta Data' button to the dashboard UI, allowing users to trigger a fresh sync from Meta to Firestore on demand.
 
-### B. Data Processing & Matching
-4. **Data Normalization**
-   - Standardize data formats across sources.
+## [2024-06-20] Frontend & Cloud Function Fixes
+- Fixed CORS issue in syncMetaData Cloud Function by adding appropriate headers for local development.
+- Registered v-chart (vue-echarts) globally in MetaDashboard.vue to resolve missing chart component warning.
+- Improved data nesting visuals and ensured all Firestore data is displayed as stored, with more details at each level.
 
-5. **Conversion Matching Algorithm**
-   - Design and implement logic to connect ad clicks/impressions to website conversions (using UTM params, click IDs, etc.).
+---
 
-### C. Firestore Data Model
-6. **Design Firestore Collections**
-   - `meta_campaigns`, `ga_events`, `gtm_events`, `conversions`, etc.
+## 🧩 Component Breakdown & Task List (Updated)
+
+### A. Foundational Setup (Complete)
+*   **[✅] Project Scaffolding & Git Repo**
+*   **[✅] Backend & Services Scaffolding**
+*   **[✅] Firestore Data Model Design**
+*   **[✅] Firestore Connection & Security Setup**
+
+### B. Data Integration Services
+*   **[✅] Meta Ads Integration (API, Secret Manager, Firestore sync, full hierarchy)**
+*   [ ] Google Analytics Integration (deferred)
+*   [ ] Google Tag Manager Integration (deferred)
+
+### C. Data Processing & Matching
+*   [ ] Data Normalization
+*   [ ] Conversion Matching Algorithm
 
 ### D. Frontend (Vue)
-7. **Dashboard UI**
-   - Campaign overview (Meta)
-   - Website analytics (GA4, GTM)
-   - Conversion matching results
-
-8. **Filtering & Controls**
-   - Date range, campaign, source, etc.
-
-9. **Visualization**
-   - Charts (e.g., Chart.js, ECharts)
-   - Tables and export options
+*   **[✅] Dashboard UI (Meta Campaigns, Ad Sets, Ads, Insights)**
+*   [ ] Filtering & Controls
+*   [ ] Visualization (charts, tables)
 
 ### E. Documentation & DevOps
-10. **DEVLOG.md**
-    - Log every step, issue, and solution.
-11. **README.md**
-    - Update with setup, architecture, and usage instructions.
+*   **[✅] DEVLOG.md**
+*   [ ] README.md (update as needed)
 
 ---
 
@@ -154,6 +182,36 @@
 ```
 
 *This model will be refined as integration proceeds and more data fields are identified.*
+
+---
+
+## 🔄 Advanced Firestore Schema for Meta Data
+
+To support full-funnel analysis and campaign performance tracking, we are upgrading the Firestore schema to a hierarchical, relational structure:
+
+- `meta_campaigns` (collection)
+  - `{campaignId}` (document)
+    - name, status, objective, etc.
+    - `ad_sets` (subcollection)
+      - `{adSetId}` (document)
+        - name, budget, status, etc.
+        - `ads` (subcollection)
+          - `{adId}` (document)
+            - name, creative_id, etc.
+            - `insights` (subcollection)
+              - `{YYYY-MM-DD}` (document)
+                - impressions, clicks, spend, conversions, etc.
+
+This schema mirrors Meta's own data model and allows for efficient queries and scalable analytics.
+
+---
+
+## 🛠️ Next Backend Steps
+
+1. Update the Meta backend service to fetch ad sets, ads, and daily insights for each campaign.
+2. Write each entity to the correct subcollection in Firestore.
+3. Ensure all writes are batched for efficiency and atomicity.
+4. Update the frontend to traverse and display this nested data structure.
 
 ---
 

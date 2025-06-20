@@ -1,40 +1,45 @@
 // Firestore Service
 // Handles Firestore initialization and data operations for TLC Insights backend.
 //
-// Place your Firebase service account key as 'serviceAccountKey.json' in the backend directory.
+// Uses the GOOGLE_APPLICATION_CREDENTIALS environment variable which should point
+// to your 'serviceAccountKey.json' file.
 
 const admin = require('firebase-admin');
-const path = require('path');
 
-const serviceAccountPath = path.join(__dirname, '../serviceAccountKey.json');
+let db;
 
-let initialized = false;
 function initFirestore() {
-  if (!initialized) {
-    admin.initializeApp({
-      credential: admin.credential.cert(require(serviceAccountPath)),
-    });
-    initialized = true;
+  if (!db) {
+    admin.initializeApp();
+    db = admin.firestore();
   }
-  return admin.firestore();
+  return db;
 }
 
-// Example: Write a Meta campaign document
+/**
+ * Writes a Meta campaign document to Firestore.
+ * @param {object} campaign The campaign data to write.
+ */
 async function writeMetaCampaign(campaign) {
-  const db = initFirestore();
-  await db.collection('meta_campaigns').doc(campaign.id).set(campaign);
+  const firestore = initFirestore();
+  const docRef = firestore.collection('meta_campaigns').doc(campaign.id);
+  await docRef.set(campaign, { merge: true });
 }
 
-// Example: Read all Meta campaigns
+/**
+ * Reads all Meta campaigns from Firestore.
+ * @returns {Promise<Array>} An array of campaign documents.
+ */
 async function getMetaCampaigns() {
-  const db = initFirestore();
-  const snapshot = await db.collection('meta_campaigns').get();
+  const firestore = initFirestore();
+  const snapshot = await firestore.collection('meta_campaigns').get();
   return snapshot.docs.map(doc => doc.data());
 }
 
 // TODO: Add similar functions for GA events, GTM events, conversions, etc.
 
 module.exports = {
+  initFirestore,
   writeMetaCampaign,
   getMetaCampaigns,
   // Add more exports as needed

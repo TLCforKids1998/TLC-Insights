@@ -1,47 +1,65 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import MetaDashboard from './components/MetaDashboard.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <el-container class="main-layout">
+    <el-aside width="180px" class="sidebar">
+      <div class="logo">TLC Insights</div>
+      <el-menu default-active="1" class="el-menu-vertical-demo">
+        <el-menu-item index="1">Meta Dashboard</el-menu-item>
+        <!-- Future: Add more dashboards here -->
+      </el-menu>
+    </el-aside>
+    <el-container>
+      <el-header class="header">
+        <h2>Internal Analytics Tool</h2>
+      </el-header>
+      <el-main class="main-content">
+        <MetaDashboard />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.main-layout {
+  min-height: 100vh;
+  background: #222;
 }
-
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #409EFF;
+  margin: 2rem 0 1rem 1rem;
 }
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  color: #222;
+}
+.sidebar {
+  background: #f5f7fa;
+  min-height: 100vh;
+  border-right: 1px solid #eee;
+}
+.main-content {
+  background: #f9f9f9;
+  padding: 2.5rem 3.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+@media (max-width: 900px) {
+  .main-content {
+    padding: 1rem;
+    max-width: 100vw;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .sidebar {
+    width: 100px !important;
   }
 }
 </style>

@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // By default, deny all read/write access to all collections.
+    // Your backend, using the Firebase Admin SDK, will bypass these
+    // rules and have full administrative access.
+    // Client-side access rules can be added here on a per-collection basis.
+    match /{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+} 
