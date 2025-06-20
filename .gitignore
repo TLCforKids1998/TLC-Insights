@@ -28,3 +28,14 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# local env files
+.env.local
+.env.*.local
+
+# Backend
+/backend/node_modules/
+/backend/serviceAccountKey.json
+
+# IDE
+.vscode
