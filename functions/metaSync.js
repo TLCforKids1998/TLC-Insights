@@ -53,15 +53,12 @@ async function fetchMetaCampaigns() {
     Campaign.Fields.updated_time,
     Campaign.Fields.special_ad_categories,
     Campaign.Fields.bid_strategy,
-    Campaign.Fields.campaign_group_id,
     Campaign.Fields.configured_status,
     Campaign.Fields.source_campaign_id,
     Campaign.Fields.topline_id,
-    Campaign.Fields.tracking_specs,
     Campaign.Fields.pacing_type,
     Campaign.Fields.promoted_object,
     Campaign.Fields.recommendations,
-    Campaign.Fields.insights,
   ]);
   return campaigns.map((campaign) => campaign._data);
 }
@@ -94,7 +91,6 @@ async function getAdSetsForCampaign(campaignId) {
     AdSet.Fields.promoted_object,
     AdSet.Fields.recommendations,
     AdSet.Fields.source_adset_id,
-    AdSet.Fields.tracking_specs,
   ]);
   return adSets.map((adSet) => adSet._data);
 }

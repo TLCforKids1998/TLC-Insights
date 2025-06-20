@@ -39,3 +39,7 @@ coverage
 
 # IDE
 .vscode
+
+# Firebase config and secrets
+frontend/src/firebaseConfig.js
+.env

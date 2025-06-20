@@ -23,16 +23,13 @@
 
 /* semantic color variables for this project */
 :root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
+  --color-background: #f9f9f9;
+  --color-background-soft: #f5f7fa;
+  --color-background-mute: #fff;
+  --color-border: #eee;
+  --color-border-hover: #ccc;
+  --color-heading: #222;
+  --color-text: #222;
   --section-gap: 160px;
 }
 
@@ -61,7 +58,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: #f9f9f9 !important;
   transition:
     color 0.5s,
     background-color 0.5s;
